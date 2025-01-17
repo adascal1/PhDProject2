@@ -80,7 +80,7 @@ if strcmp(whichAvg, 'betweenMetrics')
     g = gifti(mapToSaveLeft);
     save(g, sprintf('/mfip/mfip1/arielle/PhDProject2/maps/%s/hubLocations/%s%s_avgHubMap_%s_thresh-%f.L.func.gii', groupName, parcelName, parcelNum, whichAvg, thresh))
     g = gifti(mapToSaveRight);
-    save(g, sprintf('/mfip/mfip1/arielle/PhDProject2/maps/%s/hubLocations/%s%s_avgHubMap_%s_thresh-%f.L.func.gii', groupName, parcelName, parcelNum, whichAvg, thresh))
+    save(g, sprintf('/mfip/mfip1/arielle/PhDProject2/maps/%s/hubLocations/%s%s_avgHubMap_%s_thresh-%f.R.func.gii', groupName, parcelName, parcelNum, whichAvg, thresh))
 else 
     g = gifti(mapToSaveLeft);
     save(g, sprintf('/mfip/mfip1/arielle/PhDProject2/maps/%s/hubLocations/%s_avgHubMap_%s_thresh-%f.L.func.gii', groupName, parcelName, whichAvg, thresh))
