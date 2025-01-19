@@ -1,35 +1,52 @@
 clc; clear all; close all; 
 
-parcelPath = '/data/mica1/01_programs/micapipe-v0.2.0/parcellations';
+% Load the LUT file
+filename = '/mfip/mfip1/arielle/MICs_dataset/MNI/CBIG/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal/Parcellations/MNI/fsleyes_lut/Schaefer2018_900Parcels_7Networks_order.lut';
+data = readtable(filename, 'FileType', 'text', 'Delimiter', ' ', 'ReadVariableNames', false);
 
-%% Schaefer 100: 
-schaefer100 = table2array(readtable(fullfile(parcelPath, 'schaefer-100_conte69.csv')));
-    VISUAL      = [1:9, 51:58];
-    SOMMOT      = [10:15, 59:66];
-    DORSATT     = [16:23, 67:73];
-    SALVENTATTN = [24:30, 74:78];
-    LIMBIC      = [31:33, 79:80];
-    CONT        = [34:37, 81:89];
-    DEFAULT     = [38:50, 90:100];
+% Extract relevant columns
+indices = data.Var1;         % First column
+labels = data.Var5;          % Fifth column (contains the full string)
 
-    VISUAL100      = find(ismember(schaefer100, VISUAL));
-    SOMMOT100      = find(ismember(schaefer100, SOMMOT));
-    DORSATT100     = find(ismember(schaefer100, DORSATT));
-    SALVENTATTN100 = find(ismember(schaefer100, SALVENTATTN));
-    LIMBIC100      = find(ismember(schaefer100, LIMBIC));
-    CONT100        = find(ismember(schaefer100, CONT));
-    DEFAULT100     = find(ismember(schaefer100, DEFAULT));
+% Initialize a map for grouping
+groupedValues = containers.Map;
+
+for i = 1:length(labels)
+    % Split the label by underscores
+    parts = split(labels{i}, '_');
+    
+    % Extract the third part
+    if length(parts) >= 3
+        key = parts{3};
+    else
+        key = 'Unknown'; % Fallback for malformed strings
+    end
+    
+    % Add the index to the appropriate group
+    if isKey(groupedValues, key)
+        groupedValues(key) = [groupedValues(key); indices(i)];
+    else
+        groupedValues(key) = indices(i);
+    end
+end
+
+% Display the grouped results
+disp('Grouped Values:');
+keys = groupedValues.keys;
+for i = 1:length(keys)
+    fprintf('Group: %s\n', keys{i});
+    disp(groupedValues(keys{i}));
+end
+
+% Save the grouped values to a MAT file (optional)
+save('groupedValues.mat', 'groupedValues');
 
 
+%% To access the data 
+keys = groupedValues.keys;
+disp(keys)
 
-% yeo100 = zeros(size(schaefer100));
-% yeo100(VISUAL100)       = 1;
-% yeo100(SOMMOT100)       = 2;
-% yeo100(DORSATT100)      = 3 ;
-% yeo100(SALVENTATTN100)  = 4;
-% yeo100(LIMBIC100)       = 5;
-% yeo100(CONT100)         = 6;
-% yeo100(DEFAULT100)      = 7;
-
+value = groupedValues('Default'); % Replace 'key_name' with the actual key
+disp(value);
 
 

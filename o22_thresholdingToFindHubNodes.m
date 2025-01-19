@@ -91,7 +91,6 @@ for iParcel = 1:length(parcelNum)
         savegifti(lh, rh, parcelNum(iParcel), sprintf('%s', metrics{iMetric}), threshold)
 
 
-
     end
     
       
